@@ -725,15 +725,20 @@ function drawScene(gl, programInfo1, programInfo2, deltaTime) {
             y: e.changedTouches[0].clientY-prevTouch.y
         };
         }
-        let nMoveQuat = glMatrix.quat.create();
-        glMatrix.quat.fromEuler(nMoveQuat, deltaRot.y * ysensitivity * (Math.PI / 180), deltaRot.x * xsensitivity * (Math.PI / 180), 0);
-        glMatrix.quat.multiply(totRot, nMoveQuat, totRot);
+        if (click) {
+            let nMoveQuat = glMatrix.quat.create();
+            glMatrix.quat.fromEuler(nMoveQuat, deltaRot.y * ysensitivity * (Math.PI / 180), deltaRot.x * xsensitivity * (Math.PI / 180), 0);
+            glMatrix.quat.multiply(totRot, nMoveQuat, totRot);
+        }
         prevTouch = {x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY};
     });
-    document.body.addEventListener('touchstart', function(e){ e.preventDefault(); });
+    document.body.addEventListener('touchstart', function(e){ e.preventDefault(); click = true; mouse = {x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY}; onceclick(e)});
+    document.body.addEventListener('touchend', function(e){ click = false;});
     rCanvas.addEventListener('mousedown', function(e) {
         click = true;
         mouse = getMousePosition(canvas, e);
+    onceclick(e)})
+    function onceclick(e) {
         if (start) {
         gl.clearColor(0.0, 0.0, 0.0, 0.0);  // Clear to black, fully opaque
   gl.clearDepth(1.0);                 // Clear everything
@@ -862,7 +867,7 @@ function drawScene(gl, programInfo1, programInfo2, deltaTime) {
                 start = true;
             }
     }
-    })
+    }
     
                            
 
