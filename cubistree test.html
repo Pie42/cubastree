@@ -725,13 +725,12 @@ function drawScene(gl, programInfo1, programInfo2, deltaTime) {
             y: e.changedTouches[0].clientY-prevTouch.y
         };
         }
-        if (click) {
-            let nMoveQuat = glMatrix.quat.create();
-            glMatrix.quat.fromEuler(nMoveQuat, deltaRot.y * ysensitivity * (Math.PI / 180), deltaRot.x * xsensitivity * (Math.PI / 180), 0);
-            glMatrix.quat.multiply(totRot, nMoveQuat, totRot);
-        }
+        let nMoveQuat = glMatrix.quat.create();
+        glMatrix.quat.fromEuler(nMoveQuat, deltaRot.y * ysensitivity * (Math.PI / 180), deltaRot.x * xsensitivity * (Math.PI / 180), 0);
+        glMatrix.quat.multiply(totRot, nMoveQuat, totRot);
         prevTouch = {x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY};
     });
+    document.body.addEventListener('touchstart', function(e){ e.preventDefault(); });
     rCanvas.addEventListener('mousedown', function(e) {
         click = true;
         mouse = getMousePosition(canvas, e);
